@@ -15,8 +15,7 @@
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel" data-presets="react">
-
+<script type="text/plain" id="app-source">
 const { useState, useEffect, useRef, useCallback } = React;
 
 // ---------- constants ----------
@@ -598,9 +597,17 @@ function TripRoutePlanner() {
   );
 }
 
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<TripRoutePlanner />);
+</script>
+<script>
+  (function () {
+    var source = document.getElementById("app-source").textContent;
+    var result = Babel.transform(source, {
+      presets: [["react", { runtime: "classic" }]]
+    });
+    var script = document.createElement("script");
+    script.textContent = result.code + "\nconst root = ReactDOM.createRoot(document.getElementById('root')); root.render(React.createElement(TripRoutePlanner));";
+    document.body.appendChild(script);
+  })();
 </script>
 </body>
 </html>
